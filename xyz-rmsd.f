@@ -322,7 +322,7 @@
          write(*,300) "       if you have two .xyz files (say, 1.xyz and 2.xyz), run the"
          write(*,300) "       code with:"
          write(*,200)
-         write(*,300) "       cat 1.xyz 2.xyz | xyz-align -a"
+         write(*,300) "       cat 1.xyz 2.xyz | xyz-rmsd -a"
          write(*,200)
          write(*,300) "Requirements: Your coordinates have to be in .xyz format and they"
          write(*,300) "              MUST have the atoms listed in the same order"
