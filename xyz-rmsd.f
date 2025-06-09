@@ -125,7 +125,7 @@
       double precision :: mass
       integer          :: i
       mass=0
-      do i=1,10
+      do i=1,118
        if(trim(adjustl(al(i))).eq.trim(adjustl(lab))) mass=am(i)
       enddo
       if(mass.eq.0) stop 'oops: one of your atoms is broken'
@@ -245,8 +245,8 @@
       double precision, dimension(3,3) :: R,R1,R2
       integer                          :: i,j
       character(100)                   :: dummy
-      logical                          :: do_align
-      call moses(do_align)
+      logical                          :: do_align, do_rotor
+      call moses(do_align,do_rotor)
       read(*,*) A%n
       call A%alloc
       read(*,*) dummy
@@ -289,20 +289,24 @@
        do i=1,A%n
          write(*,200) A%l(i), C%x(i), C%y(i), C%z(i)
        enddo
+      elseif(do_rotor) then
+       write(*,400) rmsd, R
       else
        write(*,300) rmsd, theta, get_det(R)
       endif
 100   format(t1,"G = ",t5,f15.4)
 200   format(t1,a,t5,f8.4,t15,f8.4,t25,f8.4)
 300   format(t1,"RMSD = ",t8,f8.4,t18,"; Angle = ",t28,f8.4,t38,"; DetR = ",t47,f8.4)
+400   format(t1,"RMSD = ",t8,f8.4,//,t1,"R = ",t6,f6.3,t13,f6.3,t20,f6.3,/,t6,f6.3,t13,f6.3,t20,f6.3,/,t6,f6.3,t13,f6.3,t20,f6.3)
       endprogram xyz_rmsd
 !---------------------------------------------------------------------!
-      subroutine moses(do_align)
+      subroutine moses(do_align,do_rotor)
       implicit none
       integer                                :: narg, i
       character(50),allocatable,dimension(:) :: arg
-      logical                                :: do_align
+      logical                                :: do_align, do_rotor
       do_align = .false.
+      do_rotor = .false.
       narg = iargc()
       allocate(arg(narg))
       do i=1,narg
@@ -324,6 +328,12 @@
          write(*,200)
          write(*,300) "       cat 1.xyz 2.xyz | xyz-rmsd -a"
          write(*,200)
+         write(*,300) "Usage - Rotor Mode:"
+         write(*,300) "       if you have two .xyz files (say, 1.xyz and 2.xyz), run the"
+         write(*,300) "       code with:"
+         write(*,200)
+         write(*,300) "       cat 1.xyz 2.xyz | xyz-rmsd -r"
+         write(*,200)
          write(*,300) "Requirements: Your coordinates have to be in .xyz format and they"
          write(*,300) "              MUST have the atoms listed in the same order"
          write(*,300) "              This code assumes that atom_1 in the first system"
@@ -339,6 +349,9 @@
          write(*,300) "         3. the second system (aligned with the first)"
          write(*,300) "         along with some general system info in the comment lines"
          write(*,200)
+         write(*,300) "Output - Rotor Mode:" 
+         write(*,300) "         RMSD and the full rotation matrix"
+         write(*,200)
          write(*,100)
          write(*,200)
          write(*,300) "Author:"
@@ -351,11 +364,11 @@
          stop
         elseif(trim(arg(i)).eq."-a") then
          do_align = .true.
+        elseif(trim(arg(i)).eq."-r") then
+         do_rotor = .true.
         endif
        enddo
 100    format("+----------------------------------------------------------------------+")
 200    format(t1,"|",t72,"|")
 300    format(t1,"|",1x,a,t72,"|")
       endsubroutine moses
-
-      
