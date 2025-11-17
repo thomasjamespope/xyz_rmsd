@@ -24,6 +24,7 @@
         double precision :: yx2, zy2, zx2
       endtype prod
       endmodule mytype
+!---------------------------------------------------------------------!
       module functions
       use mytype
       character(2),     dimension(118) :: al=(/" H", "He", "Li", "Be", " B", " C", " N", " O", " F", "Ne", &
