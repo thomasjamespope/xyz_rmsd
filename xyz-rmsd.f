@@ -121,7 +121,7 @@
 !---------------------------------------------------------------------!
       function get_mass(lab) result(mass)
       implicit none
-      character        :: lab
+      character(2)     :: lab
       double precision :: mass
       integer          :: i
       mass=0
