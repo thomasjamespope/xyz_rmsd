@@ -30,7 +30,7 @@ jobs:
       - name: Run example usage
         run: |
           # Example: assuming you have a file test1.xyz in repo
-          cat tests/test1.xyz tests/test2.xyz ./xyz-rmsd.x -a > tests/output.txt
+          cat tests/test1.xyz tests/test2.xyz | ./xyz-rmsd.x -a > tests/output.txt
       # Check that the program worked (modify as per your expected output)
       - name: Verify output
         run: |
